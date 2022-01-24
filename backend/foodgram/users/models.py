@@ -1,36 +1,50 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-User = get_user_model()
+
+class CustomUser(AbstractUser):
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+
+    email = models.EmailField(
+        verbose_name='Адрес электронной почты',max_length=150 ,unique=True,
+    )
+    username = models.CharField(
+        verbose_name='Логин', max_length=150, unique=True,
+    )
+    first_name = models.CharField(verbose_name='Имя', max_length=150)
+    last_name = models.CharField(verbose_name='Фамилия', max_length=150)
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+
+    def __str__(self):
+        return self.username
 
 
-class Subscribtion(models.Model):
+class Subscribe(models.Model):
     user = models.ForeignKey(
-        User,
-        verbose_name='Подписки',
+        CustomUser,
         on_delete=models.CASCADE,
-        related_name='subsctiptions',
-        help_text='Подписки пользователя'
+        related_name='follower',
+        verbose_name='Пользователь',
     )
     author = models.ForeignKey(
-        User,
-        verbose_name='Автор',
+        CustomUser,
         on_delete=models.CASCADE,
-        related_name='followers',
-        help_text='Подписчики автора'
+        related_name='following',
+        verbose_name='Владелец аккаунта',
     )
 
     class Meta:
-        constraints = (
-            models.UniqueConstraint(
-                fields=('user', 'author'),
-                name='unique_subscription'
-                ),
-        )
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'author'], name='unique_follow',
+            ),
+        ]
 
     def __str__(self):
-        res = 'Подписка {user} на {author}'
-        return res.format(user=self.user.username,
-                          author=self.author.username)
+        return f'{self.user} => {self.author}'

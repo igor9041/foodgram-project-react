@@ -1,13 +1,26 @@
 from django.contrib import admin
-
-from .models import Subscribtion
-
-
-class SubscribtionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'author')
-    search_fields = ('user', 'author')
-    list_filter = ('user', 'author')
-    empty_value_display = '-пусто-'
+from users.models import CustomUser, Subscribe
 
 
-admin.site.register(Subscribtion, SubscribtionAdmin)
+class CustomUserAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'username',
+        'first_name',
+        'last_name',
+        'email',
+        'password',
+    )
+    list_filter = ('email', 'username')
+
+
+class SubscribeAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'user',
+        'author',
+    )
+
+
+admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Subscribe, SubscribeAdmin)
