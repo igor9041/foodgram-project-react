@@ -16,6 +16,7 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(verbose_name='Фамилия', max_length=150)
 
     class Meta:
+        ordering = ['date_joined']
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
@@ -23,7 +24,7 @@ class CustomUser(AbstractUser):
         return self.username
 
 
-class Subscribe(models.Model):
+class Follow(models.Model):
     user = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,

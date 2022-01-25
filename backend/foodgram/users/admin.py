@@ -1,26 +1,21 @@
-from django.contrib import admin
-from users.models import CustomUser, Subscribe
+from django.contrib.admin import ModelAdmin, register
+
+from foodgram.settings import EMPTY_STRING_FOR_ADMIN_PY
+
+from .models import CustomUser, Follow
+
+ModelAdmin.empty_value_display = EMPTY_STRING_FOR_ADMIN_PY
 
 
-class CustomUserAdmin(admin.ModelAdmin):
+@register(CustomUser)
+class MyUserAdmin(ModelAdmin):
     list_display = (
-        'id',
-        'username',
-        'first_name',
-        'last_name',
-        'email',
-        'password',
-    )
-    list_filter = ('email', 'username')
+        'id', 'username', 'email',
+        'first_name', 'last_name',)
+    search_fields = ('username', 'email')
 
 
-class SubscribeAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'user',
-        'author',
-    )
-
-
-admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Subscribe, SubscribeAdmin)
+@register(Follow)
+class SubscriptionAdmin(ModelAdmin):
+    list_display = ('user', 'author',)
+    list_filter = ('user', 'author',)
