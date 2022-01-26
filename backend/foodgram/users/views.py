@@ -1,15 +1,22 @@
-from rest_framework import permissions
-from djoser import views
+from django.contrib.auth import get_user_model
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from djoser.views import UserViewSet
 
-from .models import CustomUser
+from .pagination import Paginator
 from .serializers import CustomUserSerializer
-from .pagination import LimitPageNumberPagination
+
+User = get_user_model()
 
 
-class UserViewSet(views.UserViewSet):
+class UserViewSet(UserViewSet):
+    pagination_class = Paginator
+    queryset = User.objects.all()
     serializer_class = CustomUserSerializer
-    pagination_class = LimitPageNumberPagination
-    permission_classes = (permissions.AllowAny,)
 
-    def get_queryset(self):
-        return CustomUser.objects.all()
+    @action(detail=False, permission_classes=[AllowAny])
+    def me(self, request):
+        user = request.user
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)

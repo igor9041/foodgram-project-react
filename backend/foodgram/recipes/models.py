@@ -1,3 +1,4 @@
+from colorfield.fields import ColorField
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -23,7 +24,7 @@ class Ingredient(models.Model):
 class Tag(models.Model):
     objects = None
     name = models.CharField(max_length=200, verbose_name='Tag name')
-    color = models.CharField(max_length=8, null=True, blank=True)
+    color = ColorField(default='#000000', verbose_name='Tag color')
     slug = models.SlugField(verbose_name='slug', max_length=200, unique=True)
 
     class Meta:
