@@ -5,6 +5,14 @@ from django.db import models
 class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    USER = 'user'
+    ANONYMOUS = 'anonymous'
+    ADMIN = 'admin'
+    ROLES = [
+        (USER, 'Пользователь'),
+        (ADMIN, 'Администратор'),
+        (ANONYMOUS, 'Аноним'),
+    ]
 
     email = models.EmailField(
         verbose_name='Адрес электронной почты',max_length=150 ,unique=True,
@@ -14,9 +22,22 @@ class CustomUser(AbstractUser):
     )
     first_name = models.CharField(verbose_name='Имя', max_length=150)
     last_name = models.CharField(verbose_name='Фамилия', max_length=150)
+    role = models.CharField(
+        max_length=30,
+        choices=ROLES,
+        default=USER,
+        verbose_name='Роль'
+    )
+    @property
+    def is_admin(self):
+        return self.is_superuser or self.role == CustomUser.ADMIN
+
+    @property
+    def is_user(self):
+        return self.role == CustomUser.USER
 
     class Meta:
-        ordering = ['date_joined']
+        ordering = ('username',)
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
@@ -41,11 +62,12 @@ class Follow(models.Model):
     class Meta:
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'author'], name='unique_follow',
+        constraints = (
+            models.constraints.UniqueConstraint(
+                fields=('user', 'author', ),
+                name='follow_unique'
             ),
-        ]
+        )
 
     def __str__(self):
         return f'{self.user} => {self.author}'

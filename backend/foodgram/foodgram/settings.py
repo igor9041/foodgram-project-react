@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'djoser',
     'users',
     'recipes',
+    'django_filters'
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
