@@ -13,20 +13,20 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
-      - /home/igor/foodgram-project-react/backend/foodgram/foodgram/.env
+      - ./.env
 
   backend:
     depends_on:
       - db
     restart: always
     build:
-      context: ../backend
+      context: ../backend/foodgram/
       dockerfile: Dockerfile
     volumes:
-      - static_value:/code/static/
-      - media_value:/code/media/
+      - static_value:/app/static/
+      - media_value:/app/media/
     env_file:
-      - ../backend/.env
+      - ./.env
 
   nginx:
     depends_on:
@@ -43,7 +43,6 @@ services:
       - ../docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
       - ../docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
       
-    restart: always
 volumes:
   postgres_data:
   static_value:
