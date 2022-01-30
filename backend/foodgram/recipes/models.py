@@ -50,7 +50,6 @@ class Tag(models.Model):
 
 
 class Recipe(models.Model):
-    """Модель рецепта."""
     author = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
@@ -141,7 +140,6 @@ class Favorite(models.Model):
 
 
 class Shopping_cart(models.Model):
-    """Модель рецепта, добавленного в покупки."""
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE,
         verbose_name='Пользователь',
