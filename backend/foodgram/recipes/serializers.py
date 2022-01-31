@@ -6,41 +6,44 @@ from .fields import Base64ImageField
 from .models import Recipe, Tag, Ingredient, IngredientRecipe
 
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
+
 class M2MUserRecipeSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Recipe
-        fields = ['id', 'name', 'image', 'cooking_time']
-        read_only_fields = ['name', 'image', 'cooking_time']
+        fields = ('id', 'name', 'image', 'cooking_time')
+        read_only_fields =('name', 'image', 'cooking_time')
 
 
 class IngredientSerializer(serializers.ModelSerializer):
+    name = serializers.ReadOnlyField()
+    measurement_unit = serializers.ReadOnlyField()
+
     class Meta:
-        model = IngredientRecipe
-        fields = ['id', 'name', 'measurement_unit']
+        model = Ingredient
+        fields = ('id', 'name', 'measurement_unit')
 
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
     name = serializers.StringRelatedField(
-        source='ingredient.name'
+        source='ingredients.name'
     )
     measurement_unit = serializers.StringRelatedField(
-        source='ingredient.measurement_unit'
+        source='ingredients.measurement_unit'
     )
     id = serializers.PrimaryKeyRelatedField(
-        source='ingredient',
+        source='ingredients',
         queryset=Ingredient.objects.all()
     )
 
     class Meta:
         model = IngredientRecipe
         fields = ['id', 'name', 'measurement_unit', 'amount']
-
-
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = ['id', 'name', 'color', 'slug']
-        read_only_fields = ['name', 'color', 'slug']
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -61,8 +64,8 @@ class RecipeSerializer(serializers.ModelSerializer):
                 raise ValidationError(
                     'Количество ингредиента должно быть больше нуля'
                 )
-            if (ingredient['ingredient']) not in existing_ingredients:
-                instance = ingredient['ingredient']
+            if (ingredient['ingredients']) not in existing_ingredients:
+                instance = ingredient['ingredients']
                 existing_ingredients[instance] = True
             else:
                 raise ValidationError(
@@ -86,7 +89,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     def add_ingredients(instance, ingredients):
         for ingredient in ingredients:
             IngredientRecipe.objects.get_or_create(
-                ingredient=ingredient['ingredient'],
+                ingredient=ingredient['ingredients'],
                 amount=ingredient['amount'],
                 recipe=instance
             )
