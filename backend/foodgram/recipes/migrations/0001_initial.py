@@ -17,7 +17,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Favorite',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
             ],
             options={
                 'verbose_name': 'Избранный рецепт',
@@ -28,7 +29,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Ingredient',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=200, verbose_name='Название')),
                 ('measurement_unit', models.CharField(max_length=50)),
             ],
@@ -41,7 +43,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='IngredientRecipe',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('amount', models.PositiveIntegerField(verbose_name='Количество')),
             ],
             options={
@@ -52,11 +55,23 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Recipe',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=200, verbose_name='Название')),
-                ('image', models.ImageField(help_text='Загрузите фото готового блюда.', upload_to='recipes/', verbose_name='Картинка')),
+                ('image',
+                 models.ImageField(help_text='Загрузите фото готового блюда.',
+                                   upload_to='recipes/',
+                                   verbose_name='Картинка')),
                 ('text', models.TextField(verbose_name='Описание')),
-                ('cooking_time', models.PositiveSmallIntegerField(help_text='Напишите время приготовления в минутах', validators=[django.core.validators.MinValueValidator(1, 'Минимальное время приготовления - 1 минута.')], verbose_name='Время приготовления')),
+                (
+                    'cooking_time',
+                    models.PositiveSmallIntegerField(
+                        help_text='Напишите время приготовления в минутах',
+                        validators=[
+                            django.core.validators.MinValueValidator(
+                                1,
+                                'Минимальное время приготовления - 1 минута.')],
+                        verbose_name='Время приготовления')),
             ],
             options={
                 'verbose_name': 'Рецепт',
@@ -67,10 +82,27 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Tag',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, unique=True, verbose_name='Название')),
-                ('color', colorfield.fields.ColorField(default='#FF0000', image_field=None, max_length=7, samples=None, unique=True, verbose_name='Цвет')),
-                ('slug', models.SlugField(max_length=200, unique=True, validators=[django.core.validators.RegexValidator(code='invalid_slug', message='Не корректный slug', regex='^[-a-zA-Z0-9_]+$')])),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=200,
+                 unique=True, verbose_name='Название')),
+                ('color',
+                 colorfield.fields.ColorField(default='#FF0000',
+                                              image_field=None,
+                                              max_length=7,
+                                              samples=None,
+                                              unique=True,
+                                              verbose_name='Цвет')),
+                (
+                    'slug',
+                    models.SlugField(
+                        max_length=200,
+                        unique=True,
+                        validators=[
+                            django.core.validators.RegexValidator(
+                                code='invalid_slug',
+                                message='Не корректный slug',
+                                regex='^[-a-zA-Z0-9_]+$')])),
             ],
             options={
                 'verbose_name': 'Тег',
@@ -81,8 +113,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Shopping_cart',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('recipe', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='shopping', to='recipes.recipe', verbose_name='Рецепт')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('recipe',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='shopping',
+                                   to='recipes.recipe',
+                                   verbose_name='Рецепт')),
             ],
             options={
                 'verbose_name': 'Список покупок',

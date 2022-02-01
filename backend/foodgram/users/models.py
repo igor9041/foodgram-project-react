@@ -15,7 +15,7 @@ class CustomUser(AbstractUser):
     ]
 
     email = models.EmailField(
-        verbose_name='Адрес электронной почты',max_length=150 ,unique=True,
+        verbose_name='Адрес электронной почты', max_length=150, unique=True,
     )
     username = models.CharField(
         verbose_name='Логин', max_length=150, unique=True,
@@ -28,6 +28,7 @@ class CustomUser(AbstractUser):
         default=USER,
         verbose_name='Роль'
     )
+
     @property
     def is_admin(self):
         return self.is_superuser or self.role == CustomUser.ADMIN
