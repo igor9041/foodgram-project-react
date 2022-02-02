@@ -1,4 +1,4 @@
-from recipes.models import Tag
+from recipes.models import Ingredient, Tag
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -9,6 +9,12 @@ from .serializers import SetPasswordSerializer, TagSerializer, UserSerializer
 
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    pagination_class = None
+
+
+class IngredientViewSet(viewsets.ModelViewSet):
+    queryset = Ingredient.objects.all()
     serializer_class = TagSerializer
     pagination_class = None
 
