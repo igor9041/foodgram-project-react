@@ -31,7 +31,7 @@ class Tag(models.Model):
     )
     slug = models.SlugField(
         unique=True,
-        max_length=200,
+        max_length=150,
         validators=[
             RegexValidator(
                 regex=r'^[-a-zA-Z0-9_]+$',
