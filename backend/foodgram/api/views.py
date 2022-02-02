@@ -1,9 +1,16 @@
+from recipes.models import Tag
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from users.models import CustomUser
-from .serializers import SetPasswordSerializer, UserSerializer
+from .serializers import SetPasswordSerializer, TagSerializer, UserSerializer
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    pagination_class = None
 
 
 class UserViewSet(viewsets.ModelViewSet):
