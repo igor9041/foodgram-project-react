@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import RegexValidator
 from django.db import models
 
 
@@ -8,37 +9,29 @@ class CustomUser(AbstractUser):
         'username',
         'first_name',
         'last_name']
-    USER = 'user'
-    ANONYMOUS = 'anonymous'
-    ADMIN = 'admin'
-    ROLES = [
-        (USER, 'Пользователь'),
-        (ADMIN, 'Администратор'),
-        (ANONYMOUS, 'Аноним'),
-    ]
 
     email = models.EmailField(
-        verbose_name='Адрес электронной почты', max_length=150, unique=True,
+        verbose_name='Адрес электронной почты', max_length=254, unique=True,
     )
     username = models.CharField(
-        verbose_name='Логин', max_length=150, unique=True,
+        verbose_name='Никнейм',
+        max_length=150,
+        unique=True,
+        validators=[
+            RegexValidator(
+                regex=r'^[\w.@+-]+$',
+                message='Не корректный никнейм',
+                code='invalid_username',
+            ),
+        ]
     )
     first_name = models.CharField(verbose_name='Имя', max_length=150)
     last_name = models.CharField(verbose_name='Фамилия', max_length=150)
     role = models.CharField(
         max_length=30,
-        choices=ROLES,
-        default=USER,
         verbose_name='Роль'
     )
 
-    @property
-    def is_admin(self):
-        return self.is_superuser or self.role == CustomUser.ADMIN
-
-    @property
-    def is_user(self):
-        return self.role == CustomUser.USER
 
     class Meta:
         ordering = ('username',)
