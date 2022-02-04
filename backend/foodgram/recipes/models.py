@@ -4,22 +4,6 @@ from django.db import models
 from users.models import CustomUser
 
 
-class Ingredient(models.Model):
-    name = models.CharField(verbose_name='Название', max_length=200)
-    measurement_unit = models.CharField(
-        max_length=50,
-        blank=False,
-    )
-
-    class Meta:
-        verbose_name = 'Ингредиент'
-        verbose_name_plural = 'Ингредиенты'
-        ordering = ('name',)
-
-    def __str__(self):
-        return self.name
-
-
 class Tag(models.Model):
     name = models.CharField(
         verbose_name='Название',
@@ -50,22 +34,51 @@ class Tag(models.Model):
         return self.name
 
 
+class Ingredient(models.Model):
+    name = models.CharField(verbose_name='Название игридиента', max_length=200)
+    measurement_unit = models.CharField(
+        max_length=50,
+        blank=False,
+        verbose_name='Единица измерения'
+    )
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Ингредиент'
+        verbose_name_plural = 'Ингредиенты'
+        constraints = [
+            models.UniqueConstraint(fields=['name', 'measurement_unit'],
+                                    name='unique ingredient')
+        ]
+        
+
+    def __str__(self):
+        return self.name
+
+
 class Recipe(models.Model):
     author = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
         related_name='recipes',
-        verbose_name='Автор',
+        verbose_name='Автор рецепта',
     )
-    name = models.CharField('Название', max_length=200)
+    name = models.CharField(
+        verbose_name='Название рецепта',
+        max_length=200
+    )
     image = models.ImageField(
         'Картинка',
         upload_to='recipes/',
         help_text='Загрузите фото готового блюда.'
     )
-    text = models.TextField('Описание')
+    text = models.TextField(
+        verbose_name='Описание'
+    )
     ingredients = models.ManyToManyField(
-        Ingredient, through='IngredientRecipe', verbose_name='Ингридиенты'
+        Ingredient,
+        through='IngredientAmount',
+        verbose_name='Ингридиенты'
     )
     tags = models.ManyToManyField(
         Tag,
@@ -90,8 +103,8 @@ class Recipe(models.Model):
         return self.name
 
 
-class IngredientRecipe(models.Model):
-    ingredients = models.ForeignKey(
+class IngredientAmount(models.Model):
+    ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
         related_name='ingredient_recipe',
@@ -100,7 +113,7 @@ class IngredientRecipe(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='recipe_ingredient',
+        related_name='ingredient_recipe',
         verbose_name='Рецепт',
     )
     amount = models.PositiveIntegerField(
@@ -138,25 +151,29 @@ class Favorite(models.Model):
         return f'{self.user} добавил в избраное рецепт {self.recipe}'
 
 
-class Shopping_cart(models.Model):
+class ShoppingCart(models.Model):
     user = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
-        related_name='shopping',
+        related_name='cart',
     )
 
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Рецепт',
-        related_name='shopping'
+        related_name='cart'
     )
 
     class Meta:
+        ordering = ('id',)
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Списки покупок'
-        ordering = ('recipe',)
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'recipe'],
+                                    name='unique cart user')
+        ]
 
     def __str__(self):
         return f'{self.user} добавил в список покупок рецепт {self.recipe}'
