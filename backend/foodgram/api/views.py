@@ -105,18 +105,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
             permission_classes=[IsAuthenticated])
     def favorite(self, request, pk=None):
         if request.method == 'POST':
-            return self.add_obj(Favorite, request.user, pk)
+            return self.add_objects(Favorite, request.user, pk)
         elif request.method == 'DELETE':
-            return self.delete_obj(Favorite, request.user, pk)
+            return self.delete_objects(Favorite, request.user, pk)
         return None
 
     @action(detail=True, methods=['post', 'delete'],
             permission_classes=[IsAuthenticated])
     def shopping_cart(self, request, pk=None):
         if request.method == 'POST':
-            return self.add_obj(ShoppingCart, request.user, pk)
+            return self.add_objects(ShoppingCart, request.user, pk)
         elif request.method == 'DELETE':
-            return self.delete_obj(ShoppingCart, request.user, pk)
+            return self.delete_objects(ShoppingCart, request.user, pk)
         return None
 
     @action(detail=False, methods=['get'],
@@ -137,14 +137,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
             else:
                 final_list[name]['amount'] += item[2]
         pdfmetrics.registerFont(
-            TTFont('Slimamif', 'Slimamif.ttf', 'UTF-8'))
+            TTFont('YahfieHeavy', 'YahfieHeavy.ttf', 'UTF-8'))
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = ('attachment; '
                                            'filename="shopping_list.pdf"')
         page = canvas.Canvas(response)
-        page.setFont('Slimamif', size=24)
+        page.setFont('YahfieHeavy', size=24)
         page.drawString(200, 800, 'Список ингредиентов')
-        page.setFont('Slimamif', size=16)
+        page.setFont('YahfieHeavy', size=16)
         height = 750
         for i, (name, data) in enumerate(final_list.items(), 1):
             page.drawString(75, height, (f'<{i}> {name} - {data["amount"]}, '
@@ -154,7 +154,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         page.save()
         return response
 
-    def add_obj(self, model, user, pk):
+    def add_objects(self, model, user, pk):
         if model.objects.filter(user=user, recipe__id=pk).exists():
             return Response({
                 'errors': 'Рецепт уже добавлен в список'
@@ -164,7 +164,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer = CropRecipeSerializer(recipe)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def delete_obj(self, model, user, pk):
+    def delete_objects(self, model, user, pk):
         obj = model.objects.filter(user=user, recipe__id=pk)
         if obj.exists():
             obj.delete()
