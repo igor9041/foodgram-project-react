@@ -5,21 +5,23 @@ from foodgram.settings import EMPTY_STRING_FOR_ADMIN_PY
 from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
                             ShoppingCart, Tag)
 
+ModelAdmin.empty_value_display = EMPTY_STRING_FOR_ADMIN_PY
+
 
 @register(Recipe)
 class RecipeAdmin(ModelAdmin):
     list_display = (
-        'author', 
-        'name', 
+        'author',
+        'name',
         'favorited'
     )
     search_fields = ('author', 'name',)
     list_filter = ('name', 'author', 'tags')
     readonly_fields = ("favorited",)
-    
+
     def favorited(self, obj):
         return Favorite.objects.filter(recipe=obj).count()
-    
+
     favorited.short_description = "В избранном"
 
 
@@ -52,7 +54,7 @@ class ShoppingCartAdmin(ModelAdmin):
 
 @register(Tag)
 class TagAdmin(ModelAdmin):
-    list_display = ( 
+    list_display = (
         "name",
         "color",
         "slug"
