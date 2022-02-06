@@ -6,9 +6,20 @@
 ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
 ![PostgresSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=whit)
 
-## Стэк технологий
-
-
+### Для Ревью, Readme будет дополнено после деплоя на сервер, сейчас решил пока первую часть отправить, на проверку кода.
+1. Миграция
+```
+python manage.py migrate
+```
+2. Импорты тегов и ингредиентов
+```
+python manage.py import_ingredients
+python manage.py import_tags
+```
+3. Загрузка тестовых данных
+```
+dump.json Логин admin@my.ru Пароль admin
+```
 ## Описание
 
 Приложение **«Продуктовый помощник»**: сайт, на котором пользователи могут публиковать рецепты, добавлять чужие рецепты в избранное и подписываться на публикации других авторов. Сервис «Список покупок» позволит пользователям создавать список продуктов, которые нужно купить для приготовления выбранных блюд.
