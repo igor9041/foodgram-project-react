@@ -8,7 +8,6 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
                             ShoppingCart, Tag)
@@ -22,13 +21,13 @@ from .serializers import (CropRecipeSerializer, FollowSerializer,
                           TagSerializer)
 
 
-class TagsViewSet(ReadOnlyModelViewSet):
+class TagsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
 
 
-class IngredientsViewSet(ReadOnlyModelViewSet):
+class IngredientsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
@@ -48,11 +47,11 @@ class CustomUserViewSet(UserViewSet):
 
         if user == author:
             return Response({
-                'errors': 'Вы не можете подписываться на самого себя'
+                'errors': 'Нельзя подписываться на себя'
             }, status=status.HTTP_400_BAD_REQUEST)
         if Follow.objects.filter(user=user, author=author).exists():
             return Response({
-                'errors': 'Вы уже подписаны на данного пользователя'
+                'errors': 'Вы уже подписались на этого пользователя'
             }, status=status.HTTP_400_BAD_REQUEST)
 
         follow = Follow.objects.create(user=user, author=author)
