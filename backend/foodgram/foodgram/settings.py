@@ -133,6 +133,3 @@ DJOSER = {
         'user_list': ('rest_framework.permissions.AllowAny',)
     }
 }
-
-
-EMPTY_STRING_FOR_ADMIN_PY = '-пусто-'

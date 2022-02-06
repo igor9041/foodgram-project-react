@@ -32,7 +32,6 @@ class CustomUser(AbstractUser):
         verbose_name='Роль'
     )
 
-
     class Meta:
         ordering = ('username',)
         verbose_name = 'Пользователь'
