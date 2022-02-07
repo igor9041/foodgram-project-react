@@ -14,7 +14,7 @@ services:
       - .env
 
   backend:
-    image: patridon87/foodgram_backend:latest
+    image: igoranych91/foodgram_backend:latest
     restart: always
     volumes:
       - static_value:/app/static-files/
@@ -29,7 +29,7 @@ services:
       - .env
 
   frontend:
-    image: patridon87/foodgram_frontend:latest
+    image: igoranych91/foodgram_frontend:latest
     volumes:
       - ../frontend/:/app/result_build/
 
