@@ -5,6 +5,7 @@
 ![Python](https://img.shields.io/badge/Python-14354C?style=for-the-badge&logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
 ![PostgresSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=whit)
+[![foodgram_workflows](https://github.com/igor9041/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)](https://github.com/igor9041/foodgram-project-react/actions/workflows/foodgram_workflow.yml)
 
 ### Для Ревью, Readme будет дополнено после деплоя на сервер, сейчас решил пока первую часть отправить, на проверку кода.
 1. Миграция
