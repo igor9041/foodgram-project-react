@@ -20,7 +20,7 @@ services:
       - static_value:/app/static-files/
       - media_value:/app/media-files/
     ports:
-      - "8000:8000"
+      - "8000:80"
 
     depends_on:
       - db
