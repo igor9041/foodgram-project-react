@@ -20,7 +20,7 @@ services:
       - static_value:/app/static/
       - media_value:/app/media-files/
     ports:
-      - 8000:8000
+      - "8000:8000"
     depends_on:
       - db
 
@@ -35,14 +35,14 @@ services:
   nginx:
     image: nginx:1.19.3
     ports:
-      - 80:80
+      - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/build:/usr/share/nginx/html/
       - ../docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
       - ../docs/:/usr/share/nginx/html/api/docs/
       - static_value:/var/html/static/
-      - media_value:/var/html/media-files/
+      - media_value:/var/html/mediafiles/
   
     depends_on:
         - frontend
