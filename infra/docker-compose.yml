@@ -41,8 +41,8 @@ services:
       - ../frontend/build:/usr/share/nginx/html/
       - ../docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
       - ../docs/:/usr/share/nginx/html/api/docs/
-      - static_value:/var/html/static/
-      - media_value:/var/html/mediafiles/
+      - static_value:/var/html/static-files/
+      - media_value:/var/html/media-files/
   
     depends_on:
         - frontend
