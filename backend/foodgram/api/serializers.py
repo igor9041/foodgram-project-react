@@ -50,8 +50,8 @@ class CustomUserSerializer(UserSerializer):
 
     def get_is_subscribed(self, obj):
         user = self.context.get('request').user
-        return (not user.is_anonymous) and Follow.objects.filter(
-            user=user, author=obj.id).exists()
+        return (user.is_anonymous
+                and obj.favorites.filter(user=user).exists())
 
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
@@ -92,13 +92,13 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def get_is_favorited(self, obj):
         user = self.context.get('request').user
-        return (not user.is_anonymous) and Follow.objects.filter(
-            user=user, author=obj.id).exists()
+        return (user.is_anonymous
+                and obj.favorites.filter(user=user).exists())
 
     def get_is_in_shopping_cart(self, obj):
         user = self.context.get('request').user
-        return (not user.is_anonymous) and Follow.objects.filter(
-            user=user, author=obj.id).exists()
+        return (user.is_anonymous
+                and obj.favorites.filter(user=user).exists())
 
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
