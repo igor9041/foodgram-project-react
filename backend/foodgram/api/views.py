@@ -68,8 +68,8 @@ class CustomUserViewSet(UserViewSet):
             return Response({
                 'errors': 'Вы не можете отписываться от самого себя'
             }, status=status.HTTP_400_BAD_REQUEST)
-        follow = Follow.objects.filter(user=user, author=author)
-        if follow.exists():
+        follow = Follow.objects.filter(user=user, author=author).exists()
+        if follow:
             follow.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
