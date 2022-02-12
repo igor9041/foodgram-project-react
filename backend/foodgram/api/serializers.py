@@ -50,8 +50,8 @@ class CustomUserSerializer(UserSerializer):
 
     def get_is_subscribed(self, obj):
         user = self.context.get('request').user
-        return (user.is_authenticated and
-                Recipe.objects.filter(cart__user=user, id=obj.id).exists())
+        return (user.is_authenticated and Recipe.objects.filter(
+            favorites__user=user, id=obj.id).exists())
 
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
@@ -92,13 +92,13 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def get_is_favorited(self, obj):
         user = self.context.get('request').user
-        return (user.is_authenticated and
-                Recipe.objects.filter(cart__user=user, id=obj.id).exists())
+        return (user.is_authenticated and Recipe.objects.filter(
+            favorites__user=user, id=obj.id).exists())
 
     def get_is_in_shopping_cart(self, obj):
         user = self.context.get('request').user
-        return (user.is_authenticated and
-                Recipe.objects.filter(cart__user=user, id=obj.id).exists())
+        return (user.is_authenticated and Recipe.objects.filter(
+            favorites__user=user, id=obj.id).exists())
 
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
